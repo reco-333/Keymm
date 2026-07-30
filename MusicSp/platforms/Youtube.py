@@ -10,7 +10,7 @@ import aiohttp
 
 API_URL = os.environ.get("MusicSp_API_URL", "https://api01.shrutibots.site")
 
-API_KEY = os.environ.get("MusicSp_API_KEY", "ShrutiBotshj0m55vENAB82kqgW74k") 
+API_KEY = os.environ.get("MusicSp_API_KEY", "ShrutiBots91D2qknWtlCTxxmaBa5R") 
 
 DOWNLOAD_DIR = "downloads"
 
