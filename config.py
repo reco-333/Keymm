@@ -35,7 +35,7 @@ API_KEY = getenv("API_KEY", None) # .z
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/core-999/Keymm",
+    "https://github.com/reco-333/Keymm",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
 GIT_TOKEN = getenv(
@@ -84,7 +84,7 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://i.ibb.co/0VnyqcDm/x.jpg"
+    "START_IMG_URL", "https://i.ibb.co/Myt05rj2/x.jpg"
 )
 PING_IMG_URL = getenv(
     "PING_IMG_URL", "https://i.ibb.co/wFGtd27V/x.jpg"
