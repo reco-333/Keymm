@@ -24,7 +24,7 @@ heroku3
 
 # --- Telegram / Music bot libs ---
 kurigram
-py-tgcalls==0.9.7
+py-tgcalls==0.9.12
 pytgcrypto
 spotipy
 unidecode
