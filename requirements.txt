@@ -13,7 +13,7 @@ numpy
 
 # --- System & performance ---
 psutil
-#uvloop==0.17.0; sys_platform != "win32"  # Compatible with Python 3.10+
+uvloop==0.17.0; sys_platform != "win32"  # Compatible with Python 3.10+
 
 # --- Database & API ---
 motor
