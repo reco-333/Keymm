@@ -103,45 +103,49 @@ class Call(PyTgCalls):
 
     async def pause_stream(self, chat_id: int):
         assistant = await group_assistant(self, chat_id)
-        try:
-            await assistant.pause_stream(chat_id)
-        except Exception:
-            pass
+        await assistant.pause_stream(chat_id)
 
     async def resume_stream(self, chat_id: int):
         assistant = await group_assistant(self, chat_id)
-        try:
-            await assistant.resume_stream(chat_id)
-        except Exception:
-            pass
+        await assistant.resume_stream(chat_id)
 
     async def stop_stream(self, chat_id: int):
         assistant = await group_assistant(self, chat_id)
         try:
             await _clear_(chat_id)
-        except Exception:
-            pass
-        try:
             await assistant.leave_group_call(chat_id)
-        except Exception as e:
-            LOGGER(__name__).error(f"Stop stream error ignored: {e}")
+        except:
+            pass
 
     async def stop_stream_force(self, chat_id: int):
-        for assistant, string_val in [
-            (self.one, config.STRING1),
-            (self.two, config.STRING2),
-            (self.three, config.STRING3),
-            (self.four, config.STRING4),
-            (self.five, config.STRING5),
-        ]:
-            if string_val:
-                try:
-                    await assistant.leave_group_call(chat_id)
-                except Exception:
-                    pass
+        try:
+            if config.STRING1:
+                await self.one.leave_group_call(chat_id)
+        except:
+            pass
+        try:
+            if config.STRING2:
+                await self.two.leave_group_call(chat_id)
+        except:
+            pass
+        try:
+            if config.STRING3:
+                await self.three.leave_group_call(chat_id)
+        except:
+            pass
+        try:
+            if config.STRING4:
+                await self.four.leave_group_call(chat_id)
+        except:
+            pass
+        try:
+            if config.STRING5:
+                await self.five.leave_group_call(chat_id)
+        except:
+            pass
         try:
             await _clear_(chat_id)
-        except Exception:
+        except:
             pass
 
     async def speedup_stream(self, chat_id: int, file_path, speed, playing):
@@ -199,10 +203,7 @@ class Call(PyTgCalls):
             )
         )
         if str(db[chat_id][0]["file"]) == str(file_path):
-            try:
-                await assistant.change_stream(chat_id, stream)
-            except Exception:
-                pass
+            await assistant.change_stream(chat_id, stream)
         else:
             raise AssistantErr("Umm")
         if str(db[chat_id][0]["file"]) == str(file_path):
@@ -220,8 +221,7 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         try:
             check = db.get(chat_id)
-            if check:
-                check.pop(0)
+            check.pop(0)
         except:
             pass
         await remove_active_video_chat(chat_id)
@@ -247,13 +247,10 @@ class Call(PyTgCalls):
             )
         else:
             stream = AudioPiped(link, audio_parameters=HighQualityAudio())
-        try:
-            await assistant.change_stream(
-                chat_id,
-                stream,
-            )
-        except Exception:
-            pass
+        await assistant.change_stream(
+            chat_id,
+            stream,
+        )
 
     async def seek_stream(self, chat_id, file_path, to_seek, duration, mode):
         assistant = await group_assistant(self, chat_id)
@@ -271,23 +268,17 @@ class Call(PyTgCalls):
                 additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
         )
-        try:
-            await assistant.change_stream(chat_id, stream)
-        except Exception:
-            pass
+        await assistant.change_stream(chat_id, stream)
 
     async def stream_call(self, link):
         assistant = await group_assistant(self, config.LOG_GROUP_ID)
-        try:
-            await assistant.join_group_call(
-                config.LOG_GROUP_ID,
-                AudioVideoPiped(link),
-                stream_type=StreamType().pulse_stream,
-            )
-            await asyncio.sleep(0.2)
-            await assistant.leave_group_call(config.LOG_GROUP_ID)
-        except Exception:
-            pass
+        await assistant.join_group_call(
+            config.LOG_GROUP_ID,
+            AudioVideoPiped(link),
+            stream_type=StreamType().pulse_stream,
+        )
+        await asyncio.sleep(0.2)
+        await assistant.leave_group_call(config.LOG_GROUP_ID)
 
     async def join_call(
         self,
@@ -328,25 +319,18 @@ class Call(PyTgCalls):
             raise AssistantErr(_["call_9"])
         except TelegramServerError:
             raise AssistantErr(_["call_10"])
-        except Exception as e:
-            raise AssistantErr(f"Error: {e}")
         await add_active_chat(chat_id)
         await music_on(chat_id)
         if video:
             await add_active_video_chat(chat_id)
         if await is_autoend():
             counter[chat_id] = {}
-            try:
-                users = len(await assistant.get_participants(chat_id))
-                if users == 1:
-                    autoend[chat_id] = datetime.now() + timedelta(minutes=1)
-            except Exception:
-                pass
+            users = len(await assistant.get_participants(chat_id))
+            if users == 1:
+                autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
     async def change_stream(self, client, chat_id):
         check = db.get(chat_id)
-        if not check:
-            return
         popped = None
         loop = await get_loop(chat_id)
         try:
@@ -358,10 +342,7 @@ class Call(PyTgCalls):
             await auto_clean(popped)
             if not check:
                 await _clear_(chat_id)
-                try:
-                    return await client.leave_group_call(chat_id)
-                except Exception:
-                    return
+                return await client.leave_group_call(chat_id)
         except:
             try:
                 await _clear_(chat_id)
@@ -562,38 +543,30 @@ class Call(PyTgCalls):
 
     async def ping(self):
         pings = []
-        try:
-            if config.STRING1:
-                pings.append(await self.one.ping)
-            if config.STRING2:
-                pings.append(await self.two.ping)
-            if config.STRING3:
-                pings.append(await self.three.ping)
-            if config.STRING4:
-                pings.append(await self.four.ping)
-            if config.STRING5:
-                pings.append(await self.five.ping)
-            if pings:
-                return str(round(sum(pings) / len(pings), 3))
-        except Exception:
-            pass
-        return "0.0"
+        if config.STRING1:
+            pings.append(await self.one.ping)
+        if config.STRING2:
+            pings.append(await self.two.ping)
+        if config.STRING3:
+            pings.append(await self.three.ping)
+        if config.STRING4:
+            pings.append(await self.four.ping)
+        if config.STRING5:
+            pings.append(await self.five.ping)
+        return str(round(sum(pings) / len(pings), 3))
 
     async def start(self):
         LOGGER(__name__).info("Starting PyTgCalls Client...\n")
-        try:
-            if config.STRING1:
-                await self.one.start()
-            if config.STRING2:
-                await self.two.start()
-            if config.STRING3:
-                await self.three.start()
-            if config.STRING4:
-                await self.four.start()
-            if config.STRING5:
-                await self.five.start()
-        except Exception as e:
-            LOGGER(__name__).error(f"PyTgCalls start error ignored: {e}")
+        if config.STRING1:
+            await self.one.start()
+        if config.STRING2:
+            await self.two.start()
+        if config.STRING3:
+            await self.three.start()
+        if config.STRING4:
+            await self.four.start()
+        if config.STRING5:
+            await self.five.start()
 
     async def decorators(self):
         @self.one.on_kicked()
@@ -612,10 +585,7 @@ class Call(PyTgCalls):
         @self.four.on_left()
         @self.five.on_left()
         async def stream_services_handler(_, chat_id: int):
-            try:
-                await self.stop_stream(chat_id)
-            except Exception as e:
-                LOGGER(__name__).error(f"Stream service handler error ignored: {e}")
+            await self.stop_stream(chat_id)
 
         @self.one.on_stream_end()
         @self.two.on_stream_end()
@@ -625,10 +595,7 @@ class Call(PyTgCalls):
         async def stream_end_handler1(client, update: Update):
             if not isinstance(update, StreamAudioEnded):
                 return
-            try:
-                await self.change_stream(client, update.chat_id)
-            except Exception as e:
-                LOGGER(__name__).error(f"Stream end handler error ignored: {e}")
+            await self.change_stream(client, update.chat_id)
 
 
 DevSp = Call()
